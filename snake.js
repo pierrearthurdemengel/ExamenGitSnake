@@ -36,27 +36,28 @@ function stopGame() {
 }
 
 function checkHitWall() {
-    let headTail = snake.tail[snake.tail.length -1]
+    let headTail = snake.tail[snake.tail.length - 1];
 
-    if (headTail.x == - snake.size) {
+    if (headTail.x == -snake.size || headTail.x == canvas.width || headTail.y == -snake.size || headTail.y == canvas.height) {
         stopGame();
-    } else if (headTail.x == canvas.width) {
-        stopGame();
-    } else if (headTail.y == - snake.size) {   
-        stopGame();
-    } else if (headTail.y == canvas.height) {
-        stopGame();
+        showRestartButton();
     }
 }
 
 function checkHitSelf() {
-    let headTail = snake.tail[snake.tail.length -1] 
+    let headTail = snake.tail[snake.tail.length - 1];
 
-    for(let i = 1; i < snake.tail.length; i++){
-        if(headTail.x == snake.tail[i - 1].x && headTail.y == snake.tail[i - 1].y ){
+    for (let i = 1; i < snake.tail.length; i++) {
+        if (headTail.x == snake.tail[i - 1].x && headTail.y == snake.tail[i - 1].y) {
             stopGame();
+            showRestartButton();
         }
     }
+}
+
+function showRestartButton() {
+    const restartButton = document.getElementById('restartButton');
+    restartButton.style.display = 'block'; // Affiche le bouton
 }
 
 function draw(){
@@ -171,4 +172,22 @@ class Point{
 const snake = new Snake(80, 80, 20);
 let point = new Point();
 
+function restartGame() {
+    // Réinitialiser le serpent
+    snake.tail = [{ x: snake.x, y: snake.y }];
+    snake.rotateX = 0;
+    snake.rotateY = 0;
 
+    // Réinitialiser le point
+    point = new Point();
+
+    // Cacher le bouton "Restart"
+    const restartButton = document.getElementById('restartButton');
+    restartButton.style.display = 'none';
+
+    // Redémarrer la boucle de jeu
+    gameLoop();
+}
+
+// Ajouter un écouteur d'événement pour le bouton "Restart"
+document.getElementById('restartButton').addEventListener('click', restartGame);
